@@ -87,11 +87,8 @@ services:
         target: /var/lib/postgresql/data
 
   rag_api:
+    # --- KORREKTUR: 'build:' Block entfernt, da Target fehlt ---
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
-    build:
-      context: .
-      dockerfile: Dockerfile.multi
-      target: rag-api-build
     environment:
       - DB_HOST=vectordb
       - RAG_PORT=${RAG_PORT:-8000}
