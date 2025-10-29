@@ -6,8 +6,7 @@ services:
       dockerfile: Dockerfile.multi
       target: api-build
     container_name: LibreChat-API
-    ports:
-      - 3080:3080
+    # 'ports:' Block entfernt. Der 'client' greift intern zu.
     depends_on:
       - mongodb
       - rag_api
@@ -43,9 +42,7 @@ services:
       dockerfile: Dockerfile.multi
       target: nginx-client
     container_name: LibreChat-NGINX
-    ports:
-      - 80:80
-      - 443:443
+    # 'ports:' Block entfernt. Coolify verwaltet das.
     depends_on:
       - api
     restart: always
@@ -75,7 +72,7 @@ services:
         target: /meili_data
 
   vectordb:
-    image: pgvector/pgvector:0.8.0-pg15-trixie
+    image: pgvector/pgvector:pg15-trixie
     environment:
       POSTGRES_DB: mydatabase
       POSTGRES_USER: myuser
@@ -87,7 +84,6 @@ services:
         target: /var/lib/postgresql/data
 
   rag_api:
-    # --- KORREKTUR: 'build:' Block entfernt, da Target fehlt ---
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     environment:
       - DB_HOST=vectordb
