@@ -1,6 +1,11 @@
 services:
   api:
+    # Dieses Image dient als Cache, der Build wird dennoch ausgeführt
     image: ghcr.io/danny-avila/librechat-dev-api:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.multi
+      target: api-build
     container_name: LibreChat-API
     ports:
       - 3080:3080
@@ -15,17 +20,20 @@ services:
     environment:
       - HOST=0.0.0.0
       - NODE_ENV=production
-      - MONGO_URI=mongodb://mongodb:27017/LibKibreChat
+      - MONGO_URI=mongodb://mongodb:27017/LibreChat
       - MEILI_HOST=http://meilisearch:7700
       - RAG_PORT=${RAG_PORT:-8000}
       - RAG_API_URL=http://rag_api:${RAG_PORT:-8000}
     volumes:
+      # Diese relativen Pfade funktionieren, weil 'build: context: .' 
+      # Coolify anweist, das gesamte Repo zu kopieren.
       - type: bind
-        source: ${COOLIFY_SOURCE_DIR}/librechat.yaml
+        source: ./librechat.yaml
         target: /app/librechat.yaml
       - type: bind
-        source: ${COOLIFY_SOURCE_DIR}/images
+        source: ./images
         target: /app/client/public/images
+      # Persistente Daten als benannte Volumes
       - type: volume
         source: uploads
         target: /app/uploads
@@ -34,7 +42,12 @@ services:
         target: /app/api/logs
 
   client:
-    image: nginx:1.27.0-alpine
+    # KORREKTUR: Wir bauen den Client aus der 'nginx-client'-Stufe
+    # des 'Dockerfile.multi', anstatt ein fertiges Image zu verwenden.
+    build:
+      context: .
+      dockerfile: Dockerfile.multi
+      target: nginx-client
     container_name: LibreChat-NGINX
     ports:
       - 80:80
@@ -42,10 +55,8 @@ services:
     depends_on:
       - api
     restart: always
-    volumes:
-      - type: bind
-        source: ${COOLIFY_SOURCE_DIR}/client/nginx.conf
-        target: /etc/nginx/conf.d/default.conf
+    # Das Volume für 'nginx.conf' wird nicht mehr benötigt,
+    # da der 'COPY'-Befehl im Dockerfile dies übernimmt.
   
   mongodb:
     container_name: chat-mongodb
@@ -85,6 +96,10 @@ services:
 
   rag_api:
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.multi
+      target: rag-api-build
     environment:
       - DB_HOST=vectordb
       - RAG_PORT=${RAG_PORT:-8000}
@@ -94,6 +109,7 @@ services:
     env_file:
       - .env
 
+# Definition aller benannten Volumes
 volumes:
   pgdata2:
   uploads:
