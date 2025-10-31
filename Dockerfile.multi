@@ -69,7 +69,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.13 /uv /uvx /bin/
 RUN uv --version
 WORKDIR /app
 # Install only production deps
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 COPY api ./api
 COPY config ./config
 COPY librechatconfig ./librechat.yaml
