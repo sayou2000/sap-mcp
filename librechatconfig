@@ -191,10 +191,10 @@ actions:
 #       - /path/to/obsidian/vault
 # Example Actions Object Structure
 # actions:
-  # allowedDomains:
-    # - 'swapi.dev'
+#   allowedDomains:
+#     - 'swapi.dev'
 
-# Example MCP Servers Object Structure
+# MCP Servers Object Structure
 mcpServers:
   sap-docs-mcp:
     type: stdio
@@ -202,9 +202,6 @@ mcpServers:
     args:
       - -y
       - "@sap/mcp-server-sap-docs"
-  sap-notes-mcp:
-    type: stdio
-
 # Definition of custom endpoints
 endpoints:
   # assistants:
