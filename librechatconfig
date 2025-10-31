@@ -196,12 +196,11 @@ actions:
 
 # MCP Servers Object Structure
 mcpServers:
-  sap-docs-mcp:
-    type: stdio
-    command: npx
-    args:
-      - -y
-      - "@sap/mcp-server-sap-docs"
+  sap-docs:
+    type: http
+    url: "https://mcp-sap-docs.marianzeis.de/mcp"
+    chatMenu: true
+
 # Definition of custom endpoints
 endpoints:
   # assistants:
