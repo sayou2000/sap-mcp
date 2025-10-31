@@ -94,7 +94,7 @@ interface:
     groups: true
     roles: true
   marketplace:
-      use: false
+      use: true
   fileCitations: true
   # Temporary chat retention period in hours (default: 720, min: 1, max: 8760)
   # temporaryChatRetention: 1
@@ -163,8 +163,7 @@ actions:
     - 'librechat.ai'
     - 'google.com'
 
-# Example MCP Servers Object Structure
-# mcpServers:
+# Example MCP Servers Object StructuremcpServers:
 #   everything:
 #     # type: sse # type can optionally be omitted
 #     url: http://localhost:3001/sse
@@ -197,11 +196,15 @@ actions:
 
 # Example MCP Servers Object Structure
 mcpServers:
-  sap-docs-local:
-    type: http
-    url: "http://127.0.0.1:3122/mcp"
+  sap-docs-mcp:
+    type: stdio
+    command: npx
+    args:
+      - -y
+      - "@sap/mcp-server-sap-docs"
+  sap-notes-mcp:
+    type: stdio
 
-...
 # Definition of custom endpoints
 endpoints:
   # assistants:
