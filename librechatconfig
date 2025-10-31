@@ -190,9 +190,9 @@ actions:
 #       - "mcp-obsidian"
 #       - /path/to/obsidian/vault
 # Example Actions Object Structure
-actions:
-  allowedDomains:
-    - 'swapi.dev'
+# actions:
+  # allowedDomains:
+    # - 'swapi.dev'
 
 # Example MCP Servers Object Structure
 mcpServers:
